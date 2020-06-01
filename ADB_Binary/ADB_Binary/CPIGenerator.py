@@ -16,14 +16,19 @@ with open('Failed.bin', 'wb') as file:
         toSave = ""
         if(startFlag):
             print(chirpLength)
-            toSave = start + chirpToken + str(unhexlify(chirpLength))
+            toSave = start + chirpToken + str(unhexlify(chirpLength).decode("ISO-8859-1"))
             startFlag = False
         else:
             print(chirpLength)
-            toSave = chirpStart + chirpToken + str(unhexlify(chirpLength))
+            toSave = chirpStart + chirpToken + str(unhexlify(chirpLength).decode("ISO-8859-1"))
 
-        print(toSave)
-        file.write(toSave.encode())
+        for i in range(256):
+            toSave = toSave + "\x00\x00\x00\x00"
+            toSave = toSave + "\x00\x00\x00\x00"
+            for j in range(16):
+                toSave = toSave + "\x00"
+        print(toSave.encode())
+        file.write(toSave.encode("ISO-8859-1"))
         if(length > 0xFFFF00):
             length -= 0xFFFF00
 
